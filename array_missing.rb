@@ -1,3 +1,4 @@
+# We've got an array (1..k), but we lost 2 numbers somewhere in the array - we need to find them.
 class ArrayMissing
 
   def initialize(k,first_random,second_random)

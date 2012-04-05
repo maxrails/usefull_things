@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+#This is a script that we can start like ./grab.rb 'http://www.example.com' 'local_path_where_to_store_images' - it grab all images from site.
+
  begin
   require 'net/http'
   require 'open-uri'
