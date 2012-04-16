@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 #This is a script that we can start like ./grab.rb 'http://www.example.com' 'local_path_where_to_store_images' - it grab all images from site.
+EXTENSIONS = %w(jpg png psd tif jpeg gif bmp)
 
- begin
+begin
   require 'net/http'
   require 'open-uri'
   require 'nokogiri'
@@ -17,11 +18,18 @@
     image_address = tt['src'].gsub(web_address,'')
     p "IMAGE = #{image_address}"
     length = image_address.length
-    ext = image_address[length-3]+image_address[length-2]+image_address[length-1]
-    open(local_address+"#{Time.now.to_i}."+ext, 'wb') do |file|
-      file << open("#{web_address}#{image_address}").read
+    for i in 0..length do
+      ext = image_address.strip[length-3-i..-1-i]
+      p ext
+      break if EXTENSIONS.include?(ext)
     end
-
+    next if !EXTENSIONS.include?(ext)
+    p local_address+"#{Time.now.to_i}."+ext
+    image_current_address = image_address.include?('http://') ? image_address : "#{web_address}#{image_address}"
+    image_current_address = image_current_address.strip[0..2] == '//' ? 'http:'+image_current_address : image_current_address
+    open(local_address+"#{Time.now.to_i}."+ext, 'wb') do |file|
+      file << open(image_current_address).read rescue nil
+    end
   end
 
-end  
+end
